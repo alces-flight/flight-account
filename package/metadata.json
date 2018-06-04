@@ -1,0 +1,11 @@
+{
+  "type": "packages",
+  "attributes": {
+    "name": "flight-account-cli",
+    "version": "2.0.0-dev",
+    "summary": "Alces Flight account management CLI tool",
+    "username": "alces",
+    "dependencies": [
+    ]
+  }
+}
