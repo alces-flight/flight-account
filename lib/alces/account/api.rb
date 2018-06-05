@@ -29,7 +29,7 @@ module Alces
             raise AccountError, response.to_s
           end
         else
-          JSON.parse(response.to_s)['user']['authentication_token']
+          JSON.parse(response.to_s)['user']
         end
       end
 

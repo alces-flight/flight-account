@@ -7,9 +7,9 @@ module Alces
       include Commander::Methods
 
       def run
-        program :name, 'account'
+        program :name, 'alces account'
         program :version, '0.0.1'
-        program :description, 'Alces Flight Accounts'
+        program :description, 'Alces Flight plaform account management'
 
         command :login do |c|
           c.syntax = 'account login'

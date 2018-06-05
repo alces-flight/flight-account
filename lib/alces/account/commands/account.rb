@@ -1,3 +1,4 @@
+require 'alces/pretty'
 require 'alces/account/api'
 require 'alces/account/config'
 require 'alces/account/errors'
@@ -19,7 +20,7 @@ module Alces
             prompt.warn "You are currently logged in to the Alces Flight platform as #{Paint[Config.auth_user, :yellow, :bright]}."
             return
           end
-          banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
+          Pretty.banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
           prompt.say Paint[WordWrap.ww("To sign up for your Alces Flight account please enter your username, email address and password and agree to the privacy policy and terms of service.", 70), '#2794d8']
           username = prompt.ask(sprintf('%20s','Username:'), default: Etc.getlogin)
           email = prompt.ask(sprintf('%20s','Email address:')) do |q|
@@ -131,7 +132,7 @@ module Alces
             prompt.warn "You are currently logged in to the Alces Flight platform as #{Paint[Config.auth_user, :yellow, :bright]}."
             return
           end
-          banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
+          Pretty.banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
           username = if args[0].nil?
                        prompt.say Paint["To sign in to your Alces Flight account please enter your username and\npassword.\n", '#2794d8']
                        prompt.ask('Username:', default: Etc.getlogin)
@@ -141,17 +142,20 @@ module Alces
                      end
           password = prompt.mask('Password:')
 
-          token = nil
+          login = nil
           
           Whirly.start(spinner: 'star',
                        remove_after_stop: true,
                        append_newline: false,
                        status: Paint['Logging you in', '#2794d8']) do
-            token = api.login(username, password)
+            login = api.login(username, password)
           end
+          token = login['authentication_token']
+          email = login['email']
 
           Config.set(:auth_token, token)
           Config.set(:auth_user, username)
+          Config.set(:auth_email, email)
           prompt.say Paint["\nYou are now logged in to the Alces Flight plaform.", '#2794d8']
         rescue AccountError
           prompt.error "Log in failed: #{$!.message}"
@@ -177,27 +181,6 @@ module Alces
 
         def prompt
           @prompt ||= TTY::Prompt.new(help_color: :cyan)
-        end
-
-        def banner(title, version)
-          s = <<EOF
-
-  'o`
- 'ooo`               %{title}
- `oooo`              %{version}
-  `oooo`         'o`
-    `ooooo`  `ooooo 
-       `oooo:oooo`
-          `v  -[ %{alces} %{flight} ]-
-
-EOF
-          prompt.say Paint%[s,
-                     '#2794d8', :bold,
-                     title: [sprintf('%40s',title), :bright, :white],
-                     version: [sprintf('%40s',version), :bright, :white],
-                     alces: ['alces', :bright, :black],
-                     flight: ['flight', :bright, :white]
-                    ]
         end
 
         def display_flight_url(url, marker)
