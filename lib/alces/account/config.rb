@@ -1,5 +1,6 @@
 require 'xdg'
 require 'yaml'
+require 'fileutils'
 
 module Alces
   module Account
@@ -60,7 +61,7 @@ module Alces
 
         def save
           unless Dir.exists?(config.home.to_s)
-            Dir.mkdir(config.home.to_s, 0700)
+            FileUtils.mkdir_p(config.home.to_s, mode: 0700)
           end
           File.write(config_file, data.to_yaml)
           File.chmod(0600, config_file)  # File may contain auth token so should not be world-readable!
