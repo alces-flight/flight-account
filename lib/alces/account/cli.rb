@@ -9,7 +9,7 @@ module Alces
       def run
         program :name, 'alces account'
         program :version, '0.0.1'
-        program :description, 'Alces Flight plaform account management'
+        program :description, 'Alces Flight platform account management'
 
         command :login do |c|
           c.syntax = 'account login'
