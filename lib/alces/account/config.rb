@@ -25,7 +25,11 @@ module Alces
         end
 
         def sso_url
-          ENV['cw_SSO_URL'] || data[:sso_url] || 'https://staging.accounts.alces-flight.com'
+          ENV['cw_SSO_URL'] ||
+            data[:sso_url] ||
+            # 'http://accounts.alces-flight.lvh.me:4000'
+            # 'https://staging.accounts.alces-flight.com'
+            'https://accounts.alces-flight.com'
         end
 
         def auth_token
