@@ -1,13 +1,14 @@
 require 'xdg'
 require 'yaml'
 require 'fileutils'
+require 'etc'
 
 module Alces
   module Account
     module Config
       class << self
         include XDG::BaseDir::Mixin
-        
+
         def root
           File.join(File.dirname(__FILE__),'..','..','..')
         end
@@ -34,6 +35,10 @@ module Alces
 
         def auth_token
           data[:auth_token]
+        end
+
+        def username
+          data[:auth_user] || Etc.getlogin
         end
 
         def set(key, value)

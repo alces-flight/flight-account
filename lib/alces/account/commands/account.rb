@@ -1,3 +1,4 @@
+
 require 'alces/pretty'
 require 'alces/account/api'
 require 'alces/account/config'
@@ -22,7 +23,7 @@ module Alces
           end
           Pretty.banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
           prompt.say Paint[WordWrap.ww("To sign up for your Alces Flight account please enter your username, email address and password and agree to the privacy policy and terms of service.", 70), '#2794d8']
-          username = prompt.ask(sprintf('%20s','Username:'), default: Etc.getlogin)
+          username = prompt.ask(sprintf('%20s','Username:'), default: Config.username)
           email = prompt.ask(sprintf('%20s','Email address:')) do |q|
             q.validate(:email, 'Invalid email address')
           end
@@ -61,7 +62,7 @@ module Alces
               retry
             rescue AccountUsernameError
               prompt.error "Username already in use."
-              username = prompt.ask(sprintf('%20s','Username:'), default: Etc.getlogin)
+              username = prompt.ask(sprintf('%20s','Username:'), default: Config.username)
               retry
             end
 
@@ -135,7 +136,7 @@ module Alces
           Pretty.banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
           username = if args[0].nil?
                        prompt.say Paint["To sign in to your Alces Flight account please enter your username and\npassword.\n", '#2794d8']
-                       prompt.ask('Username:', default: Etc.getlogin)
+                       prompt.ask('Username:', default: Config.username)
                      else
                        prompt.say Paint["To sign in to your Alces Flight account please enter your password.\n", '#2794d8']
                        args[0]
