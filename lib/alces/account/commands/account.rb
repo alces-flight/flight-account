@@ -16,6 +16,16 @@ module Alces
   module Account
     module Commands
       class Account
+        def status(args, options)
+          Pretty.banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
+          prompt.say sprintf('%20s', "Account Server: #{Config.sso_url}")
+          if Config.auth_token
+            prompt.say sprintf('%20s', "Username: #{Config.username}")
+          else
+            prompt.say Paint["You are logged out of the Alces Flight platform.", '#2794d8']
+          end
+        end
+
         def subscribe(args, options)
           if Config.auth_token
             prompt.warn "You are currently logged in to the Alces Flight platform as #{Paint[Config.auth_user, :yellow, :bright]}."

@@ -11,6 +11,12 @@ module Alces
         program :version, '0.0.1'
         program :description, 'Alces Flight platform account management'
 
+        command :status do |c|
+          c.syntax = 'account status'
+          c.summary = 'Shows the current account information'
+          c.action Commands::Account, :status
+        end
+
         command :login do |c|
           c.syntax = 'account login'
           c.summary = 'Log in to your Alces Flight account'
