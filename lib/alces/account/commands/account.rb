@@ -1,3 +1,30 @@
+#==============================================================================
+# Copyright (C) 2019-present Alces Flight Ltd.
+#
+# This file is part of flight-account.
+#
+# This program and the accompanying materials are made available under
+# the terms of the Eclipse Public License 2.0 which is available at
+# <https://www.eclipse.org/legal/epl-2.0>, or alternative license
+# terms made available by Alces Flight Ltd - please direct inquiries
+# about licensing to licensing@alces-flight.com.
+#
+# This project is distributed in the hope that it will be useful, but
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
+# IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
+# OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
+# PARTICULAR PURPOSE. See the Eclipse Public License 2.0 for more
+# details.
+#
+# You should have received a copy of the Eclipse Public License 2.0
+# along with this project. If not, see:
+#
+#  https://opensource.org/licenses/EPL-2.0
+#
+# For more information on flight-account, please visit:
+# https://github.com/alces-software/flight-account
+#===============================================================================
+
 require 'alces/pretty'
 require 'alces/account/api'
 require 'alces/account/config'
@@ -15,6 +42,16 @@ module Alces
   module Account
     module Commands
       class Account
+        def status(args, options)
+          Pretty.banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
+          prompt.say sprintf('%20s', "Account Server: #{Config.sso_url}")
+          if Config.auth_token
+            prompt.say sprintf('%20s', "Username: #{Config.username}")
+          else
+            prompt.say Paint["You are logged out of the Alces Flight platform.", '#2794d8']
+          end
+        end
+
         def subscribe(args, options)
           if Config.auth_token
             prompt.warn "You are currently logged in to the Alces Flight platform as #{Paint[Config.auth_user, :yellow, :bright]}."
@@ -22,7 +59,7 @@ module Alces
           end
           Pretty.banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
           prompt.say Paint[WordWrap.ww("To sign up for your Alces Flight account please enter your username, email address and password and agree to the privacy policy and terms of service.", 70), '#2794d8']
-          username = prompt.ask(sprintf('%20s','Username:'), default: Etc.getlogin)
+          username = prompt.ask(sprintf('%20s','Username:'), default: Config.username)
           email = prompt.ask(sprintf('%20s','Email address:')) do |q|
             q.validate(:email, 'Invalid email address')
           end
@@ -61,7 +98,7 @@ module Alces
               retry
             rescue AccountUsernameError
               prompt.error "Username already in use."
-              username = prompt.ask(sprintf('%20s','Username:'), default: Etc.getlogin)
+              username = prompt.ask(sprintf('%20s','Username:'), default: Config.username)
               retry
             end
 
@@ -135,7 +172,7 @@ module Alces
           Pretty.banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
           username = if args[0].nil?
                        prompt.say Paint["To sign in to your Alces Flight account please enter your username and\npassword.\n", '#2794d8']
-                       prompt.ask('Username:', default: Etc.getlogin)
+                       prompt.ask('Username:', default: Config.username)
                      else
                        prompt.say Paint["To sign in to your Alces Flight account please enter your password.\n", '#2794d8']
                        args[0]
