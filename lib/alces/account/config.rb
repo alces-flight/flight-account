@@ -25,87 +25,68 @@
 # https://github.com/alces-software/flight-account
 #===============================================================================
 
-require 'xdg'
-require 'yaml'
-require 'fileutils'
 require 'etc'
+require 'flight_config'
 
 module Alces
   module Account
-    module Config
-      class << self
-        include XDG::BaseDir::Mixin
+    class Config
+      include FlightConfig::Updater
 
-        def root
-          File.join(File.dirname(__FILE__),'..','..','..')
+      class << self
+        def cache
+          @cache ||= read
         end
 
-        def method_missing(s,*a,&b)
-          if data.key?(s)
-            data[s]
+        def method_missing(s, *a, &b)
+          if respond_to_missing?(s) == :account_config_method
+            cache.send(s, *a, &b)
           else
             super
           end
         end
 
-        def respond_to_missing?(s)
-          data.key?(s)
-        end
-
-        def sso_url
-          ENV['cw_SSO_URL'] ||
-            data[:sso_url] ||
-            # 'http://accounts.alces-flight.lvh.me:4000'
-            # 'https://staging.accounts.alces-flight.com'
-            'https://accounts.alces-flight.com'
-        end
-
-        def auth_token
-          data[:auth_token]
-        end
-
-        def username
-          data[:auth_user] || Etc.getlogin
-        end
-
-        def set(key, value)
-          if value
-            data[key.to_sym] = value
+        def respond_to_missing?(s, **k)
+          if cache.respond_to?(s, **k)
+            :account_config_method
           else
-            data.delete(key.to_sym)
-          end
-          save
-        end
-
-        private
-        def data
-          @data ||= load
-        end
-
-        def subdirectory
-          File.join('flight','accounts')
-        end
-
-        def load
-          files = config.home.glob('config.yml')
-          if files.first
-            YAML.load_file(files.first)
-          else
-            {}
+            super
           end
         end
+      end
 
-        def save
-          unless Dir.exists?(config.home.to_s)
-            FileUtils.mkdir_p(config.home.to_s, mode: 0700)
-          end
-          File.write(config_file, data.to_yaml)
-          File.chmod(0600, config_file)  # File may contain auth token so should not be world-readable!
-        end
+      allow_missing_read
 
-        def config_file
-          File.join(config.home.to_s,'config.yml')
-        end
+      def __data__initialize(data)
+        data.set_from_env(:sso_url) { 'cw_SSO_URL' }
+      end
+
+      def root
+        File.join(File.dirname(__FILE__),'..','..','..')
+      end
+
+      def sso_url
+        __data__.fetch(:sso_url, default: 'https://accounts.alces-flight.com')
+      end
+
+      def auth_user
+        __data__.fetch(:auth_user)
+      end
+
+      def auth_token
+        __data__.fetch(:auth_token)
+      end
+
+      def username
+        __data__.fetch(:auth_user, default: Etc.getlogin)
+      end
+
+      def set(method, value)
+        __data__.set(method, value: (value || ''))
+      end
+
+      def path
+        File.expand_path('~/.config/flight/accounts/config.yml')
       end
     end
   end
