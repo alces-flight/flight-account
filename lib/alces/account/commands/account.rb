@@ -54,10 +54,10 @@ module Alces
           end
           klass = Class.new(TTY::Table::Border) do
             def_border do
-              center ':'
+              center ' : '
             end
           end
-          puts table.render_with(klass, padding: [0, 1])
+          puts table.render_with(klass)
         end
 
         def subscribe(args, options)
