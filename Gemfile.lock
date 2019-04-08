@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/alces-software/flight_config
+  revision: b4408f04de95e83de3e6c23ca503554cef2ce67e
+  specs:
+    flight_config (0.1.0)
+      tty-config
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -47,6 +54,7 @@ GEM
     timers (4.1.2)
       hitimes
     tty-color (0.4.2)
+    tty-config (0.3.1)
     tty-cursor (0.5.0)
     tty-pager (0.11.0)
       strings (~> 0.1.0)
@@ -85,6 +93,7 @@ DEPENDENCIES
   activesupport!
   colorize!
   commander!
+  flight_config!
   html2text!
   http!
   paint!
@@ -96,4 +105,4 @@ DEPENDENCIES
   zxcvbn-ruby!
 
 BUNDLED WITH
-   1.15.3
+   1.17.3

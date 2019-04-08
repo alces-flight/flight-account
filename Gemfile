@@ -39,3 +39,8 @@ source 'https://rubygems.org' do
   gem 'tty-pager'
   gem 'zxcvbn-ruby'
 end
+
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
+
+gem 'flight_config', github: 'alces-software/flight_config'
+
