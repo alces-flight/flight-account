@@ -35,7 +35,7 @@ module Alces
 
       def run
         program :name, 'alces account'
-        program :version, '0.0.1'
+        program :version, '0.0.2'
         program :description, 'Alces Flight platform account management'
 
         command :status do |c|
