@@ -46,7 +46,7 @@ module Alces
         def status(args, options)
           Pretty.banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
           table = TTY::Table.new
-          table << ['Account Server', Config.sso_url]
+          table << ['Account Server', Config.sso_url.sub(/https?:\/\//, '')]
           if Config.auth_token
             table << ['Username', Config.username]
           else
