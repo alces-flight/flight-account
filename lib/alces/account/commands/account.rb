@@ -191,6 +191,7 @@ module Alces
           email = login['email']
 
           Config.update do |config|
+            config.sso_url # Ensures the sso_url is set in the data during the save
             config.set(:auth_token, token)
             config.set(:auth_user, username)
             config.set(:auth_email, email)

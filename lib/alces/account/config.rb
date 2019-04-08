@@ -57,16 +57,13 @@ module Alces
 
       allow_missing_read
 
-      def __data__initialize(data)
-        data.set_from_env(:sso_url) { 'cw_SSO_URL' }
-      end
-
       def root
         File.join(File.dirname(__FILE__),'..','..','..')
       end
 
       def sso_url
-        __data__.fetch(:sso_url, default: 'https://accounts.alces-flight.com')
+        __data__.set_if_empty(:sso_url, value: 'https://accounts.alces-flight.com')
+        __data__.fetch(:sso_url)
       end
 
       def auth_user
