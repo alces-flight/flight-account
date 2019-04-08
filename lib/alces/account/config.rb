@@ -82,7 +82,11 @@ module Alces
       end
 
       def set(method, value)
-        __data__.set(method, value: (value || ''))
+        if value
+          __data__.set(method, value: value)
+        else
+          __data__.delete(method)
+        end
       end
 
       def path

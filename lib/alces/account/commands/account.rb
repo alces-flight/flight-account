@@ -190,9 +190,11 @@ module Alces
           token = login['authentication_token']
           email = login['email']
 
-          Config.set(:auth_token, token)
-          Config.set(:auth_user, username)
-          Config.set(:auth_email, email)
+          Config.update do |config|
+            config.set(:auth_token, token)
+            config.set(:auth_user, username)
+            config.set(:auth_email, email)
+          end
           prompt.say Paint["\nYou are now logged in to the Alces Flight plaform.", '#2794d8']
         rescue AccountError
           prompt.error "Log in failed: #{$!.message}"
@@ -207,7 +209,9 @@ module Alces
         end
 
         def logout(args, options)
-          Config.set(:auth_token, nil)
+          Config.update do |config|
+            config.set(:auth_token, nil)
+          end
           prompt.say Paint["You are now logged out of the Alces Flight platform.", '#2794d8']
         end
 
