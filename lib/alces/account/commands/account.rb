@@ -32,6 +32,7 @@ require 'alces/account/errors'
 require 'whirly'
 require 'tty-prompt'
 require 'tty-pager'
+require 'tty-table'
 require 'etc'
 require 'html2text'
 require 'word_wrap'
@@ -44,12 +45,19 @@ module Alces
       class Account
         def status(args, options)
           Pretty.banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
-          prompt.say sprintf('%20s', "Account Server: #{Config.sso_url}")
+          table = TTY::Table.new
+          table << ['Account Server', Config.sso_url]
           if Config.auth_token
-            prompt.say sprintf('%20s', "Username: #{Config.username}")
+            table << ['Username', Config.username]
           else
             prompt.say Paint["You are logged out of the Alces Flight platform.", '#2794d8']
           end
+          klass = Class.new(TTY::Table::Border) do
+            def_border do
+              center ':'
+            end
+          end
+          puts table.render_with(klass, padding: [0, 1])
         end
 
         def subscribe(args, options)
