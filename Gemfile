@@ -33,6 +33,7 @@ source 'https://rubygems.org' do
   gem 'whirly'
   gem 'paint'
   gem 'tty-prompt'
+  gem 'tty-table'
   gem 'xdg'
   gem 'html2text'
   gem 'word_wrap'

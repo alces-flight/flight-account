@@ -71,6 +71,12 @@ GEM
       tty-screen (~> 0.6.4)
       wisper (~> 2.0.0)
     tty-screen (0.6.4)
+    tty-table (0.10.0)
+      equatable (~> 0.5.0)
+      necromancer (~> 0.4.0)
+      pastel (~> 0.7.2)
+      strings (~> 0.1.0)
+      tty-screen (~> 0.6.4)
     tty-which (0.3.0)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
@@ -99,6 +105,7 @@ DEPENDENCIES
   paint!
   tty-pager!
   tty-prompt!
+  tty-table!
   whirly!
   word_wrap!
   xdg!
