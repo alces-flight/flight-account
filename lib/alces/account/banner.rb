@@ -36,10 +36,12 @@ module Alces
     module Banner
       class << self
         def emit
-          puts OpenFlight::Banner.render(
-                 title: Alces::Account::TITLE,
-                 version: Alces::Account::RELEASE
-               )
+          if const_defined?('::OpenFlight')
+            puts OpenFlight::Banner.render(
+                   title: Alces::Account::TITLE,
+                   version: Alces::Account::RELEASE
+                 )
+          end
         end
       end
     end
