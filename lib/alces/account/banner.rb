@@ -1,4 +1,3 @@
-#!/bin/bash
 #==============================================================================
 # Copyright (C) 2019-present Alces Flight Ltd.
 #
@@ -26,31 +25,25 @@
 # https://github.com/alces-software/flight-account
 #===============================================================================
 
+begin
+  require 'openflight/banner'
+rescue LoadError
+  nil
+end
 
-setup() {
-    local a xdg_config
-    IFS=: read -a xdg_config <<< "${XDG_CONFIG_HOME:-$HOME/.config}:${XDG_CONFIG_DIRS:-/etc/xdg}"
-    for a in "${xdg_config[@]}"; do
-        if [ -e "${a}"/clusterware/config.rc ]; then
-            source "${a}"/clusterware/config.rc
-            break
-        fi
-    done
-    if [ -z "${cw_ROOT}" ]; then
-        echo "$0: unable to locate clusterware configuration"
-        exit 1
-    fi
-    kernel_load
-}
-
-setup
-
-require distro
-if distro_enable_repository epel; then
-    yum install -y -e0 libxml2
-
-    cp -R data/* "${cw_ROOT}"
-else
-  echo "Sorry, the EPEL repository is not available."
-  exit 1
-fi
+module Alces
+  module Account
+    module Banner
+      class << self
+        def emit
+          if const_defined?('::OpenFlight')
+            puts OpenFlight::Banner.render(
+                   title: Alces::Account::TITLE,
+                   version: Alces::Account::RELEASE
+                 )
+          end
+        end
+      end
+    end
+  end
+end

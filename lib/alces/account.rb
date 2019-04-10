@@ -24,5 +24,4 @@
 # For more information on flight-account, please visit:
 # https://github.com/alces-software/flight-account
 #===============================================================================
-
 require 'alces/account/cli'

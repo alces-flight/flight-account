@@ -25,23 +25,17 @@
 # https://github.com/alces-software/flight-account
 #===============================================================================
 
-source 'https://rubygems.org' do
-  gem 'colorize'
-  gem 'commander'
-  gem 'activesupport'
-  gem 'http'
-  gem 'whirly'
-  gem 'paint'
-  gem 'tty-prompt'
-  gem 'tty-table'
-  gem 'xdg'
-  gem 'html2text'
-  gem 'word_wrap'
-  gem 'tty-pager'
-  gem 'zxcvbn-ruby'
-end
-
+source 'https://rubygems.org'
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
-gem 'flight_config', github: 'alces-software/flight_config'
+gem 'commander-openflighthpc', github: 'openflighthpc/commander-openflighthpc', tag: 'develop'
 
+gem 'http'
+gem 'whirly'
+gem 'tty-prompt'
+gem 'tty-table'
+gem 'xdg'
+gem 'html2text'
+gem 'word_wrap'
+gem 'tty-pager'
+gem 'zxcvbn-ruby'
