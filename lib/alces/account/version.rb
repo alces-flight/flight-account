@@ -1,4 +1,4 @@
-# =============================================================================
+#==============================================================================
 # Copyright (C) 2019-present Alces Flight Ltd.
 #
 # This file is part of Flight Account.
@@ -21,9 +21,9 @@
 #
 #  https://opensource.org/licenses/EPL-2.0
 #
-# For more information on Flight Inventory, please visit:
-# https://github.com/alces-software/flight-account
-# ==============================================================================
+# For more information on Flight Account, please visit:
+# https://github.com/alces-flight/flight-account
+#==============================================================================
 module Alces
   module Account
     VERSION = '1.2.0'
