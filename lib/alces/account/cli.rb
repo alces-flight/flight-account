@@ -9,7 +9,7 @@
 # terms made available by Alces Flight Ltd - please direct inquiries
 # about licensing to licensing@alces-flight.com.
 #
-# This project is distributed in the hope that it will be useful, but
+# Flight Account is distributed in the hope that it will be useful, but
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR
 # IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS
 # OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A
@@ -17,14 +17,13 @@
 # details.
 #
 # You should have received a copy of the Eclipse Public License 2.0
-# along with this project. If not, see:
+# along with Flight Account. If not, see:
 #
 #  https://opensource.org/licenses/EPL-2.0
 #
-# For more information on flight-account, please visit:
-# https://github.com/alces-software/flight-account
+# For more information on Flight Account, please visit:
+# https://github.com/alces-flight/flight-account
 #==============================================================================
-
 require 'commander'
 require 'alces/account/commands/account'
 require 'alces/account/version'
