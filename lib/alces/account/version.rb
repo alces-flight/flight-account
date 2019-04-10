@@ -26,8 +26,8 @@
 # ==============================================================================
 module Alces
   module Account
-    VERSION = '1.2.0'
-    DATE = '2019-04-10'
+    VERSION = '1.3.0-dev1'
+    DATE = 'Unreleased'
     TITLE = 'Alces Flight account management'
     RELEASE = "Release 2019.1 (v#{VERSION} - #{DATE})"
   end
