@@ -1,7 +1,7 @@
 #==============================================================================
 # Copyright (C) 2019-present Alces Flight Ltd.
 #
-# This file is part of flight-account.
+# This file is part of Flight Account.
 #
 # This program and the accompanying materials are made available under
 # the terms of the Eclipse Public License 2.0 which is available at
@@ -23,49 +23,62 @@
 #
 # For more information on flight-account, please visit:
 # https://github.com/alces-software/flight-account
-#===============================================================================
+#==============================================================================
 
-require 'commander/no-global-highline'
+require 'commander'
 require 'alces/account/commands/account'
+require 'alces/account/version'
 
 module Alces
   module Account
     class CLI
-      include Commander::Methods
+      PROGRAM_NAME = ENV.fetch('FLIGHT_PROGRAM_NAME','account')
 
-      def run
-        program :name, 'alces account'
-        program :version, '0.0.2'
-        program :description, 'Alces Flight platform account management'
+      extend Commander::Delegates
+      program :application, Alces::Account::TITLE
+      program :name, PROGRAM_NAME
+      program :version, Alces::Account::RELEASE
+      program :description, 'Alces Flight platform account management.'
+      program :help_paging, false
+      default_command :help
+      silent_trace!
 
-        command :status do |c|
-          c.syntax = 'account status'
-          c.summary = 'Shows the current account information'
-          c.action Commands::Account, :status
+      class << self
+        def cli_syntax(command, args_str = nil)
+          command.syntax = [
+            PROGRAM_NAME,
+            command.name,
+            args_str
+          ].compact.join(' ')
         end
+      end
 
-        command :login do |c|
-          c.syntax = 'account login'
-          c.summary = 'Log in to your Alces Flight account'
-          c.description = 'Log in to your Alces Flight account.'
-          c.action Commands::Account, :login
-        end
+      command :status do |c|
+        cli_syntax(c)
+        c.summary = 'Display your current login status'
+        c.description = 'Display your current login status.'
+        c.action Commands::Account, :status
+      end
 
-        command :logout do |c|
-          c.syntax = 'account logout'
-          c.summary = 'Log out of your Alces Flight account'
-          c.description = 'Log out of your Alces Flight account.'
-          c.action Commands::Account, :logout
-        end
+      command :login do |c|
+        cli_syntax(c)
+        c.summary = 'Log in to your Alces Flight account'
+        c.description = 'Log in to your Alces Flight account.'
+        c.action Commands::Account, :login
+      end
 
-        command :subscribe do |c|
-          c.syntax = 'account subscribe'
-          c.summary = 'Create a new Alces Flight account'
-          c.description = 'Create a new Alces Flight account.'
-          c.action Commands::Account, :subscribe
-        end
+      command :logout do |c|
+        cli_syntax(c)
+        c.summary = 'Log out of your Alces Flight account'
+        c.description = 'Log out of your Alces Flight account.'
+        c.action Commands::Account, :logout
+      end
 
-        run!
+      command :subscribe do |c|
+        cli_syntax(c)
+        c.summary = 'Create a new Alces Flight account'
+        c.description = 'Create a new Alces Flight account.'
+        c.action Commands::Account, :subscribe
       end
     end
   end

@@ -25,15 +25,14 @@
 # https://github.com/alces-software/flight-account
 #===============================================================================
 
-require 'alces/pretty'
 require 'alces/account/api'
+require 'alces/account/banner'
 require 'alces/account/config'
 require 'alces/account/errors'
 require 'whirly'
 require 'tty-prompt'
 require 'tty-pager'
 require 'tty-table'
-require 'etc'
 require 'html2text'
 require 'word_wrap'
 require 'open-uri'
@@ -44,28 +43,30 @@ module Alces
     module Commands
       class Account
         def status(args, options)
-          Pretty.banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
+          Alces::Account::Banner.emit
           table = TTY::Table.new
           table << ['Account Server', Config.sso_url.sub(/https?:\/\//, '')]
           if Config.auth_token
             table << ['Username', Config.username]
-          else
-            prompt.say Paint["You are logged out of the Alces Flight platform.", '#2794d8']
+            table << ['Email', Config.email]
           end
           klass = Class.new(TTY::Table::Border) do
             def_border do
-              center ' : '
+              center ': '
             end
           end
-          puts table.render_with(klass)
+          puts table.render_with(klass, alignments: [:right, :left] )
+          if !Config.auth_token
+            prompt.say Paint%["\nYou are currently %{logged_out} of the Alces Flight platform.\n", '#2794d8', logged_out: ['logged out', '#57c4f8']]
+          end
         end
 
         def subscribe(args, options)
           if Config.auth_token
-            prompt.warn "You are currently logged in to the Alces Flight platform as #{Paint[Config.auth_user, :yellow, :bright]}."
+            prompt.warn "You are currently logged in to the Alces Flight platform as #{Paint[Config.username, :yellow, :bright]}."
             return
           end
-          Pretty.banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
+          Alces::Account::Banner.emit
           prompt.say Paint[WordWrap.ww("To sign up for your Alces Flight account please enter your username, email address and password and agree to the privacy policy and terms of service.", 70), '#2794d8']
           username = prompt.ask(sprintf('%20s','Username:'), default: Config.username)
           email = prompt.ask(sprintf('%20s','Email address:')) do |q|
@@ -174,10 +175,10 @@ module Alces
         
         def login(args, options)
           if Config.auth_token
-            prompt.warn "You are currently logged in to the Alces Flight platform as #{Paint[Config.auth_user, :yellow, :bright]}."
+            prompt.warn "You are currently logged in to the Alces Flight platform as #{Paint[Config.username, :yellow, :bright]}."
             return
           end
-          Pretty.banner('Alces Flight account management', 'v1.0.2 -- 2018-05-30')
+          Alces::Account::Banner.emit
           username = if args[0].nil?
                        prompt.say Paint["To sign in to your Alces Flight account please enter your username and\npassword.\n", '#2794d8']
                        prompt.ask('Username:', default: Config.username)
@@ -198,12 +199,11 @@ module Alces
           token = login['authentication_token']
           email = login['email']
 
-          Config.update do |config|
-            config.sso_url # Ensures the sso_url is set in the data during the save
-            config.set(:auth_token, token)
-            config.set(:auth_user, username)
-            config.set(:auth_email, email)
-          end
+          Config.set(:sso_url, Config.sso_url)
+          Config.set(:auth_token, token)
+          Config.set(:auth_user, username)
+          Config.set(:auth_email, email)
+
           prompt.say Paint["\nYou are now logged in to the Alces Flight plaform.", '#2794d8']
         rescue AccountError
           prompt.error "Log in failed: #{$!.message}"
@@ -218,8 +218,9 @@ module Alces
         end
 
         def logout(args, options)
-          Config.update do |config|
-            config.set(:auth_token, nil)
+          if Config.auth_token
+            Config.set(:auth_token, nil)
+            Config.set(:sso_url, nil)
           end
           prompt.say Paint["You are now logged out of the Alces Flight platform.", '#2794d8']
         end
