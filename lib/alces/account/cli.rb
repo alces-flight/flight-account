@@ -79,12 +79,14 @@ module Alces
         c.action run_account_method(:logout)
       end
 
-      command :subscribe do |c|
-        cli_syntax(c)
-        c.summary = 'Create a new Alces Flight account'
-        c.description = 'Create a new Alces Flight account.'
-        c.action run_account_method(:subscribe)
-      end
+      # XXX Disable subscribe command.  It currently isn't fully implemented
+      # and isn't needed for the initial release.
+      # command :subscribe do |c|
+      #   cli_syntax(c)
+      #   c.summary = 'Create a new Alces Flight account'
+      #   c.description = 'Create a new Alces Flight account.'
+      #   c.action run_account_method(:subscribe)
+      # end
     end
   end
 end
