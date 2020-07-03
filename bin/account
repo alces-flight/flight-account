@@ -36,4 +36,4 @@ Bundler.setup(:default)
 
 require 'alces/account'
 Dir.chdir(ENV.fetch('FLIGHT_CWD','.'))
-Alces::Account::CLI.run!
+Alces::Account::CLI.run!(*ARGV)

@@ -33,14 +33,14 @@ module Alces
     class CLI
       PROGRAM_NAME = ENV.fetch('FLIGHT_PROGRAM_NAME','account')
 
-      extend Commander::Delegates
+      extend Commander::CLI
+
       program :application, Alces::Account::TITLE
       program :name, PROGRAM_NAME
       program :version, Alces::Account::RELEASE
       program :description, 'Alces Flight platform account management.'
       program :help_paging, false
       default_command :help
-      silent_trace!
 
       class << self
         def cli_syntax(command, args_str = nil)
@@ -50,35 +50,43 @@ module Alces
             args_str
           ].compact.join(' ')
         end
+
+        def run_account_method(m)
+          Proc.new do |args, opts, config|
+            Commands::Account.new.send(m, args, opts)
+          end
+        end
       end
 
       command :status do |c|
         cli_syntax(c)
         c.summary = 'Display your current login status'
         c.description = 'Display your current login status.'
-        c.action Commands::Account, :status
+        c.action run_account_method(:status)
       end
 
       command :login do |c|
         cli_syntax(c)
         c.summary = 'Log in to your Alces Flight account'
         c.description = 'Log in to your Alces Flight account.'
-        c.action Commands::Account, :login
+        c.action run_account_method(:login)
       end
 
       command :logout do |c|
         cli_syntax(c)
         c.summary = 'Log out of your Alces Flight account'
         c.description = 'Log out of your Alces Flight account.'
-        c.action Commands::Account, :logout
+        c.action run_account_method(:logout)
       end
 
-      command :subscribe do |c|
-        cli_syntax(c)
-        c.summary = 'Create a new Alces Flight account'
-        c.description = 'Create a new Alces Flight account.'
-        c.action Commands::Account, :subscribe
-      end
+      # XXX Disable subscribe command.  It currently isn't fully implemented
+      # and isn't needed for the initial release.
+      # command :subscribe do |c|
+      #   cli_syntax(c)
+      #   c.summary = 'Create a new Alces Flight account'
+      #   c.description = 'Create a new Alces Flight account.'
+      #   c.action run_account_method(:subscribe)
+      # end
     end
   end
 end

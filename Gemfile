@@ -27,7 +27,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
-gem 'commander-openflighthpc', github: 'openflighthpc/commander-openflighthpc', tag: 'develop'
+gem 'commander-openflighthpc', github: 'openflighthpc/commander-openflighthpc'
 
 gem 'http'
 gem 'whirly'
