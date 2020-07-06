@@ -97,7 +97,7 @@ module Alces
         end
 
         def subdirectory
-          File.join('flight','accounts')
+          File.join('flight', 'account')
         end
 
         def load
