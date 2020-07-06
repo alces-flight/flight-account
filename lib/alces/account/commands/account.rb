@@ -61,7 +61,7 @@ module Alces
         end
 
         def get(args, options)
-          Alces::Account::Banner.emit
+          Alces::Account::Banner.emit if $stdout.tty?
           key = args.first
           puts Config.get(key.downcase)
         end
