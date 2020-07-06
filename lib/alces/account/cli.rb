@@ -65,6 +65,14 @@ module Alces
         c.action run_account_method(:status)
       end
 
+      command :get do |c|
+        cli_syntax(c, '<username|email|auth_token|server>')
+        c.summary = 'Get a configuration value from the config file.'
+        c.description = 'Display your current login status.'
+        c.description = "The `get` command can be used to print a configuration value in the config file."
+        c.action run_account_method(:get)
+      end
+
       command :login do |c|
         cli_syntax(c)
         c.summary = 'Log in to your Alces Flight account'

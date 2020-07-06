@@ -79,6 +79,17 @@ module Alces
           save
         end
 
+        def get(key)
+          case key
+          when 'username', 'email'
+            send(key)
+          when 'account server', 'server'
+            sso_url
+          else
+            data[key.to_sym]
+          end
+        end
+
         private
 
         def data
