@@ -60,6 +60,12 @@ module Alces
           end
         end
 
+        def get(args, options)
+          Alces::Account::Banner.emit
+          key = args.first
+          puts Config.get(key.downcase)
+        end
+
         def subscribe(args, options)
           if Config.auth_token
             prompt.warn "You are currently logged in to the Alces Flight platform as #{Paint[Config.username, :yellow, :bright]}."

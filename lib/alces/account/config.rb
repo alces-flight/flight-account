@@ -33,7 +33,6 @@ module Alces
   module Account
     module Config
       class << self
-        include XDG::BaseDir::Mixin
 
         def root
           File.join(File.dirname(__FILE__),'..','..','..')
@@ -80,34 +79,51 @@ module Alces
           save
         end
 
+        def get(key)
+          case key
+          when 'username', 'email'
+            send(key)
+          when 'account server', 'server'
+            sso_url
+          else
+            data[key.to_sym]
+          end
+        end
+
         private
+
         def data
           @data ||= load
         end
 
         def subdirectory
-          File.join('flight','accounts')
+          File.join('flight', 'account')
         end
 
         def load
-          files = config.home.glob('config.yml')
-          if files.first
-            YAML.load_file(files.first)
+          if File.exists?(config_file)
+            YAML.load_file(config_file)
           else
             {}
           end
         end
 
         def save
-          unless Dir.exists?(config.home.to_s)
-            FileUtils.mkdir_p(config.home.to_s, mode: 0700)
+          unless Dir.exists?(config_dir)
+            FileUtils.mkdir_p(config_dir, mode: 0700)
           end
           File.write(config_file, data.to_yaml)
-          File.chmod(0600, config_file)  # File may contain auth token so should not be world-readable!
+          # File may contain auth token so should not be world-readable!
+          File.chmod(0600, config_file)
         end
 
         def config_file
-          File.join(config.home.to_s,'config.yml')
+          File.join(config_dir, 'config.yml')
+        end
+
+        def config_dir
+          @xdg ||= XDG::Environment.new
+          File.join(@xdg.config_home, subdirectory)
         end
       end
     end
