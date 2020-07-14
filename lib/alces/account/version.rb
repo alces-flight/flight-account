@@ -26,9 +26,6 @@
 #==============================================================================
 module Alces
   module Account
-    VERSION = '1.3.0-rc2'
-    DATE = '2020-07-03'
-    TITLE = 'Alces Flight account management'
-    RELEASE = "Release 2020.1 (v#{VERSION} - #{DATE})"
+    VERSION = '1.3.1'
   end
 end

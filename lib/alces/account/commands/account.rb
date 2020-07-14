@@ -25,7 +25,6 @@
 # https://github.com/alces-flight/flight-account
 #==============================================================================
 require 'alces/account/api'
-require 'alces/account/banner'
 require 'alces/account/config'
 require 'alces/account/errors'
 require 'whirly'
@@ -42,7 +41,6 @@ module Alces
     module Commands
       class Account
         def status(args, options)
-          Alces::Account::Banner.emit
           table = TTY::Table.new
           table << ['Account Server', Config.sso_url.sub(/https?:\/\//, '')]
           if Config.auth_token
@@ -61,7 +59,6 @@ module Alces
         end
 
         def get(args, options)
-          Alces::Account::Banner.emit if $stdout.tty?
           key = args.first
           puts Config.get(key.downcase)
         end
@@ -71,7 +68,6 @@ module Alces
             prompt.warn "You are currently logged in to the Alces Flight platform as #{Paint[Config.username, :yellow, :bright]}."
             return
           end
-          Alces::Account::Banner.emit
           prompt.say Paint[WordWrap.ww("To sign up for your Alces Flight account please enter your username, email address and password and agree to the privacy policy and terms of service.", 70), '#2794d8']
           username = prompt.ask(sprintf('%20s','Username:'), default: Config.username)
           email = prompt.ask(sprintf('%20s','Email address:')) do |q|
@@ -183,7 +179,6 @@ module Alces
             prompt.warn "You are currently logged in to the Alces Flight platform as #{Paint[Config.username, :yellow, :bright]}."
             return
           end
-          Alces::Account::Banner.emit
           username = if args[0].nil?
                        prompt.say Paint["To sign in to your Alces Flight account please enter your username and\npassword.\n", '#2794d8']
                        prompt.ask('Username:', default: Config.username)

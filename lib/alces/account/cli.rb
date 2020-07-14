@@ -35,9 +35,9 @@ module Alces
 
       extend Commander::CLI
 
-      program :application, Alces::Account::TITLE
+      program :application, 'Flight Account'
       program :name, PROGRAM_NAME
-      program :version, Alces::Account::RELEASE
+      program :version, "v#{Alces::Account::VERSION}"
       program :description, 'Alces Flight platform account management.'
       program :help_paging, false
       default_command :help
