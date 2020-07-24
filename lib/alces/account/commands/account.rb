@@ -180,12 +180,12 @@ module Alces
             return
           end
           username_or_email = if args[0].nil?
-                       prompt.say Paint["To sign in to your Alces Flight account please enter your username/email \nand password.\n", '#2794d8']
-                       prompt.ask('Username/Email:', default: Config.username)
-                     else
-                       prompt.say Paint["To sign in to your Alces Flight account please enter your password.\n", '#2794d8']
-                       args[0]
-                     end
+            prompt.say Paint["To sign in to your Alces Flight account please enter your username/email \nand password.\n", '#2794d8']
+            prompt.ask('Username/Email:', default: Config.username)
+          else
+            prompt.say Paint["To sign in to your Alces Flight account please enter your password.\n", '#2794d8']
+            args[0]
+          end
           password = prompt.mask('Password:')
 
           login = nil
