@@ -198,11 +198,11 @@ module Alces
           end
           token = login['authentication_token']
           email = login['email']
+          username = login['username']
 
           Config.set(:sso_url, Config.sso_url)
           Config.set(:auth_token, token)
-          # TODO: Some how get the username associated with the email if required
-          Config.set(:auth_user, username_or_email)
+          Config.set(:auth_user, username)
           Config.set(:auth_email, email)
 
           prompt.say Paint["\nYou are now logged in to the Alces Flight plaform.", '#2794d8']
