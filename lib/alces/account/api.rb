@@ -32,7 +32,7 @@ require 'alces/account/errors'
 module Alces
   module Account
     class API
-      def login(username, password)
+      def login(username_or_email, password)
         sso_base_url = Config.sso_url.chomp('/')
 
         response = http.post(
@@ -42,7 +42,7 @@ module Alces
           },
           json: {
             account: {
-              username: username,
+              login: username_or_email,
               password: password
             }
           }

@@ -179,13 +179,13 @@ module Alces
             prompt.warn "You are currently logged in to the Alces Flight platform as #{Paint[Config.username, :yellow, :bright]}."
             return
           end
-          username = if args[0].nil?
-                       prompt.say Paint["To sign in to your Alces Flight account please enter your username and\npassword.\n", '#2794d8']
-                       prompt.ask('Username:', default: Config.username)
-                     else
-                       prompt.say Paint["To sign in to your Alces Flight account please enter your password.\n", '#2794d8']
-                       args[0]
-                     end
+          username_or_email = if args[0].nil?
+            prompt.say Paint["To sign in to your Alces Flight account please enter your username/email \nand password.\n", '#2794d8']
+            prompt.ask('Username/Email:', default: Config.username)
+          else
+            prompt.say Paint["To sign in to your Alces Flight account please enter your password.\n", '#2794d8']
+            args[0]
+          end
           password = prompt.mask('Password:')
 
           login = nil
@@ -194,10 +194,11 @@ module Alces
                        remove_after_stop: true,
                        append_newline: false,
                        status: Paint['Logging you in', '#2794d8']) do
-            login = api.login(username, password)
+            login = api.login(username_or_email, password)
           end
           token = login['authentication_token']
           email = login['email']
+          username = login['username']
 
           Config.set(:sso_url, Config.sso_url)
           Config.set(:auth_token, token)
